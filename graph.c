@@ -118,18 +118,20 @@ void init(graph** p)
 		set_arch(g,4,7);
 		set_arch(g,5,7);
 		set_arch(g,6,7);
+		
+		*p = g;
 
 		IsVisited = (char*)malloc(sizeof(char)*(g->amount));
 		for(i=0; i<g->amount; i++){
 				*(IsVisited+i)=false;
 		}
-		*p = g;
 }
 
 int main()
 {
 		graph* p=NULL;
 		init(&p);
+		//DFS(p,0);
 		BFS(p,0);
 		return 0;
 }
