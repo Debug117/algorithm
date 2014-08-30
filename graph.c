@@ -74,8 +74,10 @@ int BFS(graph* g, int ID)
 		}
 
 		while((d=dequeue(&queue)) != -1){
-				visit(g,d);
-				*(IsVisited+d)=true;
+				if(*(IsVisited+d) == false){
+						visit(g,d);
+						*(IsVisited+d)=true;
+				}
 				for(i=0; i<g->amount; i++){
 						if(g->arch[d][i]==1){
 							if(*(IsVisited+i) ==false)
