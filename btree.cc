@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #include <queue>
+#include <deque>
+using namespace std;
 
 typedef struct _node{
 	int				data;
@@ -322,6 +325,74 @@ void delNode(node** btree, int val)
 	}
 }
 
+node* find(node* btree, int elem)
+{
+	node* p =btree;
+	if(btree){
+		if(btree->data == elem){
+			return p;
+		}else{
+			if(elem <= p->data){
+				return find(p->left, elem);
+			}else{
+				return find(p->right, elem);
+			}
+		}
+	}else{
+		return NULL;
+	}
+}
+
+static deque<node*> track;
+void path_dfs(node* btree, int elem)
+{
+	node* p =btree;
+	if(!p){
+		return ;
+	}
+	track.push_back(p);
+	if(p->data == elem){
+		return ;
+	}
+	if(elem <= p->data){
+		if(p->left){
+			path_dfs(p->left,elem);
+		}else{
+			return ;
+		}
+	}else{
+		if(p->right){
+			path_dfs(p->right, elem);
+		}else{
+			return ;
+		}
+	}
+	//track.pop_back();
+}
+
+void path(node* btree, int elem1, int elem2)
+{
+	node* p1 = find(btree, elem1);
+	if(!p1){
+		printf("cannot find element: %d\n", elem1);
+		return ;
+	}
+	node* p2 = find(p1, elem2);
+	if(!p2){
+		printf("cannot find element %d in %d's children\n", elem2, elem1);
+		return ;
+	}
+	track.clear();
+	path_dfs(p1,elem2);
+	if(track.empty()==false){
+		printf("[%d->%d]: ", elem1, elem2);
+		for(int i=0; i<track.size(); i++){
+			printf("%d-->",track[i]->data);
+		}
+		printf("\b\b\b   \n");
+	}
+}
+
 int main()
 {
 	node* btree =NULL;
@@ -333,7 +404,6 @@ int main()
 		printf("%d ",rand);
 		insert(&btree, rand);
 	}
-
 	printf("\n--------------------------------------\n");
 
 	print(btree,0);
@@ -355,6 +425,9 @@ int main()
 	printf("%d and %d parent is %d\n",21,35,(pp)?pp->data:0);
 	pp = getParent(btree,6,71);
 	printf("%d and %d parent is %d\n",6,71,(!pp)?0:pp->data);
+
+	path(btree,83,49);
+	path(btree,83,92);
 
 	delNode(&btree, 49);
 	print(btree,2);
