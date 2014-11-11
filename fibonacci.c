@@ -9,18 +9,26 @@ int fib(int seq)
 				return fib(seq-1)+fib(seq-2);
 }
 
+int fib2(int seq)
+{
+	if(seq<2){
+		return seq;
+	}
+	int n1=0,n2=1,nn=0;
+	int c = 1;
+	while(c++<seq){
+		nn = n1+n2;
+		n1 = n2;
+		n2 = nn;
+	}
+	return nn;
+}
+
 int main()
 {
 		int i=0;
 		for(i=0; i<MAX; i++){
-				printf("%d ",fib(i));
+				printf("%d: %d, %d\n",i,fib(i),fib2(i));
 		}
-		printf("\n");
-		double limit=((double)fib(30))/((double)fib(29));
-		printf("limit: %f\n",limit);
-		limit=((double)fib(40))/((double)fib(39));
-		printf("limit: %f\n",limit);
-		limit=((double)fib(45))/((double)fib(44));
-		printf("limit: %f\n",limit);
 		return 0;
 }
